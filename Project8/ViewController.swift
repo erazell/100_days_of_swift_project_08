@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     var currentAnswer: UITextField!
     var scoreLabel: UILabel!
     var letterButtons = [UIButton]()
+    var correctAnswerCount = 0
     
     var activatedButtons = [UIButton]()
     var solutions = [String]()
@@ -126,6 +127,9 @@ class ViewController: UIViewController {
                 buttonsView.addSubview(letterButton)
                 letterButtons.append(letterButton)
                 letterButton.addTarget(self, action: #selector(letterTapped), for: .touchUpInside)
+                letterButton.layer.borderWidth = 2
+                letterButton.layer.borderColor = UIColor.lightGray.cgColor
+
             }
         }
  
@@ -161,12 +165,23 @@ class ViewController: UIViewController {
             answerLabel.text = splitAnswers?.joined(separator: "\n")
             currentAnswer.text = ""
             score += 1
+            correctAnswerCount += 1
             
-            if score % 7 == 0 {
+            if correctAnswerCount == 7 {
                 let ac = UIAlertController(title: "Well done!", message: "Are you ready for the next level?", preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUp))
                 present(ac, animated: true)
             }
+        } else {
+            let ac = UIAlertController(title: "Wrong try!", message: "You have to to be more smart", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+        for btn in activatedButtons{
+                  btn.isHidden = false
+              }
+            score -= 1
+            currentAnswer.text = ""
+
         }
     }
     
